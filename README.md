@@ -114,21 +114,25 @@ flowchart LR
 ```mermaid
 flowchart TB
     subgraph 前端["前端 · Vue3 + Vant4 + ECharts（PC / 移动端自适应）"]
-        F1[诊断] --- F2[检索] --- F3[作业指引] --- F4[审核] --- F5[驾驶舱]
+        direction LR
+        F1[诊断] ~~~ F2[检索] ~~~ F3[作业指引] ~~~ F4[审核] ~~~ F5[驾驶舱]
     end
     subgraph 后端["后端 · FastAPI（12 个路由模块 / 55 个 API）"]
+        direction LR
         S1[LLMService<br/>四通道路由与降级]
         S2[VectorStore<br/>混合检索]
         S3[KGService<br/>图谱抽取与子图查询]
         S4[PDFParser<br/>手册解析入库]
     end
     subgraph 数据["PostgreSQL 15"]
+        direction LR
         D1[(pgvector 向量)]
         D2[(zhparser 全文索引)]
         D3[(知识图谱两表)]
         D4[(业务数据 13 张表)]
     end
     subgraph 模型["模型层"]
+        direction LR
         M1[云端 CHAT / VL / Embedding]
         M2[本地 llama.cpp<br/>Qwen2.5-1.5B + BGE-base-zh]
     end
