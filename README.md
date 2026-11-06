@@ -111,15 +111,17 @@ flowchart LR
 
 ## 🏗️ 系统架构
 
-```mermaid
-flowchart LR
-    A["<b>🖥️ 前端</b><br/>Vue3 · Vant4 · ECharts<br/>PC / 移动端自适应<br/>11 个业务页面"]
-    B["<b>⚙️ 后端 FastAPI</b><br/>12 个路由 · 55 个 API<br/>四通道模型路由与降级<br/>混合检索 · 知识图谱<br/>PDF 手册解析入库"]
-    C[("<b>🗄️ PostgreSQL 15</b><br/>pgvector 向量<br/>zhparser 中文全文<br/>知识图谱 + 业务表")]
-    D["<b>🧠 模型层</b><br/>云端 CHAT / VL / Embedding<br/>本地 llama.cpp 兜底<br/>Qwen2.5-1.5B + BGE"]
-    A -->|REST + JWT| B
-    B --> C
-    B --> D
+| 层次 | 组成 | 职责 |
+|---|---|---|
+| 🖥️ **表现层** | Vue3 · Vant4 · ECharts | 11 个业务页面，PC / 移动端自适应，语音输入与播报 |
+| ⚙️ **服务层** | FastAPI（12 个路由模块 · 55 个 API） | JWT 鉴权；`LLMService` 四通道模型路由与降级、`VectorStore` 混合检索、`KGService` 知识图谱、`PDFParser` 手册解析入库 |
+| 🗄️ **数据层** | PostgreSQL 15 | `pgvector` 向量检索、`zhparser` 中文全文检索、知识图谱两表、13 张业务表 |
+| 🧠 **模型层** | 云端 + 本地 llama.cpp | 云端 CHAT / VL / Embedding 为主，本地 Qwen2.5-1.5B + BGE-base-zh 断网兜底 |
+
+```
+ 浏览器 (PC / 手机) ──REST + JWT──▶ FastAPI ──▶ PostgreSQL (pgvector + zhparser + 知识图谱)
+                                       │
+                                       └──▶ 云端大模型 ──失败/断网──▶ 本地 llama.cpp
 ```
 
 ---
