@@ -1,0 +1,5 @@
+# 部署目标为银河麒麟 V11 (Linux)，统一 LF 换行，防止 .sh 在 Windows 签出后变 CRLF 无法执行
+* text=auto eol=lf
+*.jpeg binary
+*.jpg binary
+*.png binary

@@ -1,0 +1,327 @@
+/* ===== 内置 emoji 字体（不依赖系统字体，解决麒麟 V11 下 emoji 显示为 ▢ 的问题）=====
+   字体文件放在 public/fonts/emoji.ttf（构建后位于 backend/static/fonts/emoji.ttf）。
+   放在字体栈最后：正文优先用中文/英文字体，仅 emoji 码位回退到此字体。 */
+@font-face {
+  font-family: 'AppEmoji';
+  src: url('/fonts/emoji.ttf') format('truetype');
+  font-display: swap;
+  /* 仅作用于 emoji/符号码位，避免抢占数字、中文、英文字形 */
+  unicode-range:
+    U+00A9, U+00AE, U+203C, U+2049, U+2122, U+2139,
+    U+2194-2199, U+21A9-21AA, U+231A-231B, U+2328, U+23CF, U+23E9-23F3, U+23F8-23FA,
+    U+24C2, U+25AA-25FE, U+2600-26FF, U+2700-27BF, U+2934-2935, U+2B00-2BFF,
+    U+3030, U+303D, U+3297, U+3299, U+1F000-1FAFF, U+FE00-FE0F, U+20E3, U+E0020-E007F;
+}
+
+/* ===== 科技风全局样式 ===== */
+:root {
+  /* 提亮的深色主题（再提一档）：背景更亮的石板蓝灰，不刺眼又更清晰 */
+  --bg-primary:    #2b3650;
+  --bg-secondary:  #323e5c;
+  --bg-card:       #3a4768;
+  --bg-card-hover: #45537b;
+  --border-color:  #50608a;
+  --border-glow:   #22ddff66;
+
+  --accent-cyan:   #22ddff;
+  --accent-blue:   #2b7bff;
+  --accent-purple: #8b5cf6;
+  --accent-green:  #2ee6a8;
+  --accent-red:    #ff5e6c;
+  --accent-orange: #ffab57;
+
+  --text-primary:   #f8fafc;
+  --text-secondary: #ccd6e6;
+  --text-muted:     #93a2bd;
+  --text-accent:    #22ddff;
+
+  --gradient-header: linear-gradient(135deg, #2b7bff22 0%, #22ddff11 100%);
+  --gradient-card:   linear-gradient(135deg, #3a4768 0%, #323e5c 100%);
+  --gradient-btn:    linear-gradient(135deg, #2b7bff 0%, #22ddff 100%);
+
+  --shadow-glow:  0 0 20px #22ddff33;
+  --shadow-card:  0 4px 24px #00000040;
+  --shadow-btn:   0 4px 15px #2b7bff55;
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body, #app {
+  height: 100%;
+  min-height: 100vh;
+}
+
+body {
+  font-family: 'AppEmoji', -apple-system, 'PingFang SC', 'Microsoft YaHei', 'Helvetica Neue', sans-serif;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-size: 17px;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* 表单控件继承字体栈，确保按钮/输入框里的 emoji 也走内置字体回退 */
+button, input, select, textarea {
+  font-family: inherit;
+}
+
+/* 全局滚动条 */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--bg-primary); }
+::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--accent-cyan); }
+
+/* 科技背景网格 */
+.tech-bg {
+  background-image:
+    linear-gradient(rgba(0,212,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,212,255,0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* 通用卡片 */
+.tech-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  transition: all 0.3s ease;
+}
+.tech-card:hover {
+  border-color: var(--border-glow);
+  box-shadow: var(--shadow-glow);
+}
+
+/* 发光标题栏 */
+.tech-header {
+  background: var(--gradient-header);
+  border-bottom: 1px solid var(--border-color);
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.tech-header .title {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--accent-cyan);
+  letter-spacing: 0.05em;
+}
+
+/* 主按钮 */
+.btn-primary {
+  background: var(--gradient-btn);
+  border: none;
+  color: #fff;
+  padding: 12px 28px;
+  border-radius: var(--radius-sm);
+  font-size: 17px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: var(--shadow-btn);
+  transition: all 0.3s ease;
+  letter-spacing: 0.05em;
+}
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px #0066ff66;
+}
+.btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* 描边按钮 */
+.btn-outline {
+  background: transparent;
+  border: 1px solid var(--accent-cyan);
+  color: var(--accent-cyan);
+  padding: 10px 24px;
+  border-radius: var(--radius-sm);
+  font-size: 17px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.btn-outline:hover {
+  background: var(--accent-cyan);
+  color: var(--bg-primary);
+}
+
+/* 危险按钮 */
+.btn-danger {
+  background: linear-gradient(135deg, #c0392b, #e74c3c);
+  border: none;
+  color: #fff;
+  padding: 10px 24px;
+  border-radius: var(--radius-sm);
+  font-size: 17px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.btn-danger:hover { opacity: 0.85; transform: translateY(-1px); }
+
+/* 标签 */
+.tech-tag {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(0,212,255,0.1);
+  border: 1px solid rgba(0,212,255,0.3);
+  color: var(--accent-cyan);
+  padding: 3px 12px;
+  border-radius: 20px;
+  font-size: 14px;
+}
+.tech-tag.green {
+  background: rgba(0,255,157,0.1);
+  border-color: rgba(0,255,157,0.3);
+  color: var(--accent-green);
+}
+.tech-tag.red {
+  background: rgba(255,71,87,0.1);
+  border-color: rgba(255,71,87,0.3);
+  color: var(--accent-red);
+}
+.tech-tag.orange {
+  background: rgba(255,159,67,0.1);
+  border-color: rgba(255,159,67,0.3);
+  color: var(--accent-orange);
+}
+.tech-tag.purple {
+  background: rgba(124,58,237,0.15);
+  border-color: rgba(124,58,237,0.4);
+  color: #a78bfa;
+}
+
+/* 输入框 */
+.tech-input {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  padding: 12px 16px;
+  font-size: 17px;
+  width: 100%;
+  transition: border-color 0.3s;
+  outline: none;
+}
+.tech-input:focus {
+  border-color: var(--accent-cyan);
+  box-shadow: 0 0 0 2px rgba(0,212,255,0.1);
+}
+.tech-input::placeholder { color: var(--text-muted); }
+
+/* 分割线 */
+.tech-divider {
+  border: none;
+  border-top: 1px solid var(--border-color);
+  margin: 16px 0;
+}
+
+/* 发光点缀 */
+.glow-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--accent-cyan);
+  box-shadow: 0 0 8px var(--accent-cyan);
+  display: inline-block;
+}
+.glow-dot.green { background: var(--accent-green); box-shadow: 0 0 8px var(--accent-green); }
+.glow-dot.red   { background: var(--accent-red);   box-shadow: 0 0 8px var(--accent-red);   }
+.glow-dot.orange{ background: var(--accent-orange); box-shadow: 0 0 8px var(--accent-orange); }
+
+/* 加载动画 */
+@keyframes pulse-glow {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.4; }
+}
+.loading-dot { animation: pulse-glow 1.4s ease-in-out infinite; }
+
+/* 扫描线动画 */
+@keyframes scan-line {
+  0%   { top: -4px; }
+  100% { top: 100%; }
+}
+
+/* 页面布局 */
+.app-layout {
+  display: flex;
+  min-height: 100vh;
+}
+.app-sidebar {
+  width: 220px;
+  flex-shrink: 0;
+  background: var(--bg-secondary);
+  border-right: 1px solid var(--border-color);
+  position: fixed;
+  top: 0; left: 0;
+  height: 100vh;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+}
+.app-main {
+  margin-left: 220px;
+  flex: 1;
+  /* flex 项默认 min-width:auto，子元素里一段不换行的长文本会把主区连同整个布局撑宽，
+     导致页面出现横向滚动、看上去"放大了"。置 0 后超宽内容由各自容器自行截断。 */
+  min-width: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+.app-topbar {
+  height: 56px;
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  padding: 0 24px;
+  position: sticky;
+  top: 0;
+  z-index: 90;
+  gap: 12px;
+}
+.page-content {
+  flex: 1;
+  min-width: 0;
+  padding: 24px;
+  overflow-y: auto;
+  overflow-x: hidden;   /* 兜底：任何页面都不产生横向滚动 */
+}
+
+/* 响应式 */
+@media (max-width: 768px) {
+  /* 仅隐藏布局中常驻的侧边栏；TopBar 汉堡抽屉(van-popup 内)的 SideMenu 不受影响。
+     用 !important + 后代选择器压过 SideMenu.vue 的 scoped 样式特异性 */
+  .app-layout > .app-sidebar { display: none !important; }
+  .app-main { margin-left: 0; }
+  .page-content { padding: 16px; }
+}
+
+/* Vant 覆盖：深色主题 */
+:root {
+  --van-background: var(--bg-card);
+  --van-text-color: var(--text-primary);
+  --van-border-color: var(--border-color);
+  --van-primary-color: var(--accent-cyan);
+  /* 跟随放大后的字号基准 */
+  --van-font-size-sm: 15px;
+  --van-font-size-md: 17px;
+  --van-font-size-lg: 19px;
+  --van-cell-font-size: 17px;
+}
+.van-cell { background: transparent; color: var(--text-primary); }
+.van-field__control { color: var(--text-primary) !important; background: transparent; }
+.van-field { background: var(--bg-secondary) !important; }
+.van-popup { background: var(--bg-card); }
+.van-action-sheet { background: var(--bg-card); }
+.van-uploader__wrapper { gap: 8px; }

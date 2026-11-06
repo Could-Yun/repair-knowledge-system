@@ -1,0 +1,16 @@
+# ============================================================
+# 可选依赖（按需安装，默认部署不需要）
+# 这些包在 LoongArch 上无现成 wheel，需源码编译，安装慢且易失败。
+# 主路径已用 llama.cpp embedding + 在 x86 预解析 PDF 规避它们。
+# ============================================================
+
+# ---- 备选 A：ONNX 本地 embedding（仅当 BGE GGUF 量化效果不达标时启用）----
+# 需 Python ≥3.11 + onnxruntime ≥1.24（LoongArch wheel，见 SKILL 16 §3.3）
+# 启用方式：装好后设 EMBED_BACKEND=onnx 或 auto
+onnxruntime==1.24.1
+transformers==4.40.0
+tokenizers==0.19.0
+
+# ---- 现场解析 PDF（推荐改在 x86 机预解析成 JSON 后 scp，见 SKILL 16 §3.5）----
+# LoongArch 上 pip install 会自动下载 MuPDF 源码编译（~20 分钟，需先 yum install swig）
+PyMuPDF==1.24.1

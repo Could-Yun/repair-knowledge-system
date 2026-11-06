@@ -1,0 +1,59 @@
+# ============================================================
+# 核心依赖（银河麒麟 V11 桌面版 / LoongArch 可装）
+# 全部为纯 Python，或有可靠的 LoongArch 源码编译路径（asyncpg/numpy/Pillow）
+# 推理后端走 llama.cpp（chat:11434 + embed:11435）HTTP，不需 onnxruntime
+#
+# ⚠️ ONNX embedding 备选 / 现场解析 PDF 才需要的重依赖见 requirements-optional.txt
+#    （onnxruntime/transformers/PyMuPDF 在 LoongArch 无现成 wheel，单独按需安装）
+# ============================================================
+
+# Web 框架
+fastapi==0.110.0
+# 用纯 uvicorn（不带 [standard]）：[standard] 会拉 watchfiles，它是 Rust，LoongArch 编不动
+# 生产用 systemd 拉起，无需 --reload；h11(纯Python) 性能足够评测
+uvicorn==0.29.0
+python-multipart==0.0.9
+
+# 数据库
+sqlalchemy==2.0.29
+asyncpg==0.29.0
+alembic==1.13.1
+
+# 认证
+# 去掉 [cryptography] 这个 extra：它拉 Rust 写的 cryptography 包；
+# 我们只用 HS256(HMAC)，python-jose 纯 Python 后端(ecdsa/rsa/pyasn1)即可，不需 cryptography
+python-jose==3.3.0
+# bcrypt 锁 3.2.2：4.x 改用 Rust，LoongArch 编不动；3.2.2 是 C 扩展(gcc 可编)
+# security.py 直接调 bcrypt.hashpw/checkpw，3.2.2 完全支持，无需 passlib
+bcrypt==3.2.2
+
+# 向量扩展（pgvector Python 客户端）
+# 注意：这是 Python 客户端；PostgreSQL 的 pgvector 扩展需另装 ≥0.7.4（源码编译，见 SKILL 16 §3.2）
+pgvector==0.3.6
+
+# HTTP 客户端（LLM / Embedding 调用，均走 OpenAI 兼容 HTTP）
+httpx==0.27.0
+
+# 数值计算（向量 L2 归一化等）
+# 放宽下限，直接复用 V11 系统 RPM python3-numpy(1.24.x)，避免源码编译 BLAS
+numpy>=1.24,<2
+
+# 图片处理（缩略图）
+Pillow==10.3.0
+
+# 二维码生成（手机访问；纯 Python，LoongArch 无障碍）
+qrcode==7.4.2
+
+# 日志
+loguru==0.7.2
+
+# 配置管理
+python-dotenv==1.0.1
+# pydantic v1（LoongArch 规避 Rust 编译 pydantic-core）
+# V11 用系统 RPM：sudo dnf install -y python3-pydantic（1.10.x，纯 Python，无 Rust）
+# venv 加 --system-site-packages 即可复用；本约束防止 pip 拉回 v2
+pydantic>=1.10,<2
+# 注意：pydantic-settings 是 v2 专属，已移除，配置改用 pydantic v1 内置 BaseSettings
+
+# 工具
+aiofiles==23.2.1
