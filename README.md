@@ -113,32 +113,13 @@ flowchart LR
 
 ```mermaid
 flowchart TB
-    subgraph 前端["前端 · Vue3 + Vant4 + ECharts（PC / 移动端自适应）"]
-        direction LR
-        F1[诊断] ~~~ F2[检索] ~~~ F3[作业指引] ~~~ F4[审核] ~~~ F5[驾驶舱]
-    end
-    subgraph 后端["后端 · FastAPI（12 个路由模块 / 55 个 API）"]
-        direction LR
-        S1[LLMService<br/>四通道路由与降级]
-        S2[VectorStore<br/>混合检索]
-        S3[KGService<br/>图谱抽取与子图查询]
-        S4[PDFParser<br/>手册解析入库]
-    end
-    subgraph 数据["PostgreSQL 15"]
-        direction LR
-        D1[(pgvector 向量)]
-        D2[(zhparser 全文索引)]
-        D3[(知识图谱两表)]
-        D4[(业务数据 13 张表)]
-    end
-    subgraph 模型["模型层"]
-        direction LR
-        M1[云端 CHAT / VL / Embedding]
-        M2[本地 llama.cpp<br/>Qwen2.5-1.5B + BGE-base-zh]
-    end
-    前端 -->|REST + JWT| 后端
-    后端 --> 数据
-    后端 --> 模型
+    A["🖥️ 前端 · Vue3 + Vant4 + ECharts（PC / 移动端自适应）<br/>智能诊断 · 知识检索 · 检修指引 · 标准化作业 · 案例审核 · 数据驾驶舱"]
+    B["⚙️ 后端 · FastAPI（12 个路由模块 / 55 个 API）<br/>LLMService 四通道路由与降级 · VectorStore 混合检索 · KGService 知识图谱 · PDFParser 手册入库"]
+    C[("🗄️ PostgreSQL 15<br/>pgvector 向量 · zhparser 中文全文 · 知识图谱 · 13 张业务表")]
+    D["🧠 模型层<br/>云端 CHAT / VL / Embedding · 本地 llama.cpp（Qwen2.5-1.5B + BGE-base-zh）"]
+    A -->|REST + JWT| B
+    B --> C
+    B --> D
 ```
 
 ---
