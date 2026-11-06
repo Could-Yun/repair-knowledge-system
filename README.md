@@ -112,11 +112,11 @@ flowchart LR
 ## 🏗️ 系统架构
 
 ```mermaid
-flowchart TB
-    A["🖥️ 前端 · Vue3 + Vant4 + ECharts（PC / 移动端自适应）<br/>智能诊断 · 知识检索 · 检修指引 · 标准化作业 · 案例审核 · 数据驾驶舱"]
-    B["⚙️ 后端 · FastAPI（12 个路由模块 / 55 个 API）<br/>LLMService 四通道路由与降级 · VectorStore 混合检索 · KGService 知识图谱 · PDFParser 手册入库"]
-    C[("🗄️ PostgreSQL 15<br/>pgvector 向量 · zhparser 中文全文 · 知识图谱 · 13 张业务表")]
-    D["🧠 模型层<br/>云端 CHAT / VL / Embedding · 本地 llama.cpp（Qwen2.5-1.5B + BGE-base-zh）"]
+flowchart LR
+    A["<b>🖥️ 前端</b><br/>Vue3 · Vant4 · ECharts<br/>PC / 移动端自适应<br/>11 个业务页面"]
+    B["<b>⚙️ 后端 FastAPI</b><br/>12 个路由 · 55 个 API<br/>四通道模型路由与降级<br/>混合检索 · 知识图谱<br/>PDF 手册解析入库"]
+    C[("<b>🗄️ PostgreSQL 15</b><br/>pgvector 向量<br/>zhparser 中文全文<br/>知识图谱 + 业务表")]
+    D["<b>🧠 模型层</b><br/>云端 CHAT / VL / Embedding<br/>本地 llama.cpp 兜底<br/>Qwen2.5-1.5B + BGE"]
     A -->|REST + JWT| B
     B --> C
     B --> D
